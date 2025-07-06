@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-import { createNoteSchema } from "../schema/notes";
-import { fakeNotes } from "../fakeNotes";
+import { createNoteSchema } from "../../schema/notes";
+import { fakeNotes } from "../../fakeNotes";
 
 export const notesRoute = new Hono()
   .get("/", async (c) => {
