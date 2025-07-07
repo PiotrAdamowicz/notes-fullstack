@@ -5,7 +5,7 @@ import { fakeNotes } from "../../fakeNotes";
 
 export const notesRoute = new Hono()
   .get("/", async (c) => {
-    return c.json({ notes: [] });
+    return c.json(fakeNotes);
   })
   .post("/", zValidator("json", createNoteSchema), async (c) => {
     const data = await c.req.valid("json");
