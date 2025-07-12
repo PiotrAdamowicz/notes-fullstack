@@ -1,6 +1,7 @@
 import { hc } from "hono/client";
 import type { ApiRoutes } from "../../../server/app.ts";
 import type { Note } from "../../../types/notes";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export const client = hc<ApiRoutes>("/");
 
@@ -15,15 +16,17 @@ export default function NoteList({ isPending, error, notes }: NoteListProps) {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <ul>
+    <div className="flex gap-4">
       {isPending
         ? "..."
         : notes.map((note) => (
-            <li key={note.id}>
-              <h3>{note.title}</h3>
-              <p>{note.content}</p>
-            </li>
+            <Card key={note.id}>
+              <CardHeader>
+                <CardTitle>{note.title}</CardTitle>
+              </CardHeader>
+              <CardContent>{note.content}</CardContent>
+            </Card>
           ))}
-    </ul>
+    </div>
   );
 }

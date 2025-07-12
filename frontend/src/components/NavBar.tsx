@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 
 export function NavBar() {
   return (
-    <nav className="p-2 flex gap-2">
+    <nav className="p-2 flex gap-2 my-2">
       <Link to="/" className="[&.active]:font-bold">
         Home
       </Link>{" "}
