@@ -1,27 +1,16 @@
-import { useEffect, useState } from "react";
-import type { Note } from "../../../types/notes";
-// import { client } from "../lib/api";
 import { hc } from "hono/client";
 import type { ApiRoutes } from "../../../server/app.ts";
-import { useQuery } from "@tanstack/react-query";
+import type { Note } from "../../../types/notes";
 
 export const client = hc<ApiRoutes>("/");
 
-async function getNotes() {
-  const res = await client.api.notes.$get();
-  if (!res.ok) {
-    throw new Error("server error");
-  }
-  const data = await res.json();
-  return data;
-}
+type NoteListProps = {
+  isPending: boolean;
+  error: { message: string } | null;
+  notes: Note[];
+};
 
-export default function NoteList() {
-  const { isPending, error, data, isFetched } = useQuery({
-    queryKey: ["notes"],
-    queryFn: getNotes,
-  });
-
+export default function NoteList({ isPending, error, notes }: NoteListProps) {
   if (isPending) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -29,7 +18,7 @@ export default function NoteList() {
     <ul>
       {isPending
         ? "..."
-        : data.map((note) => (
+        : notes.map((note) => (
             <li key={note.id}>
               <h3>{note.title}</h3>
               <p>{note.content}</p>

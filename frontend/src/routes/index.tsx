@@ -1,15 +1,31 @@
 import { createFileRoute } from "@tanstack/react-router";
 import NoteList from "../components/NoteList";
+import type { ApiRoutes } from "../../../server/app";
+import { hc } from "hono/client";
+import { useQuery } from "@tanstack/react-query";
 
+export const client = hc<ApiRoutes>("/");
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Index() {
-  return (
-    <div className="text-3xl font-bold bg-gray-700 text-white h-screen text-center">
-      <h3>Welcome Home!</h3>
-      <NoteList />
-    </div>
-  );
+async function getNotes() {
+  const res = await client.api.notes.$get();
+  if (!res.ok) {
+    throw new Error("server error");
+  }
+  const data = await res.json();
+  return data;
+}
+
+export default function Index() {
+  const { isPending, error, data } = useQuery({
+    queryKey: ["notes"],
+    queryFn: getNotes,
+  });
+
+  if (isPending) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
+  return <NoteList notes={data} isPending={isPending} error={error} />;
 }
