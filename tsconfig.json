@@ -8,8 +8,11 @@
     "jsx": "react-jsx",
     "allowJs": true,
     "paths": {
+      "@server/*": ["./server/*"],
       "@/*": ["./frontend/src/*"],
-      "@server/*": ["./server/*"]
+      "@components/*": ["./frontend/src/components/*"],
+      "@lib/*": ["./frontend/src/lib/*"],
+      "@routes/*": ["./frontend/src/routes/*"]
     },
 
     // Bundler mode

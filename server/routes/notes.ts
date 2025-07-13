@@ -16,6 +16,7 @@ export const notesRoute = new Hono()
       id: fakeNotes.length + 1,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      color: note.color || "transparent",
     });
 
     return c.json(note);

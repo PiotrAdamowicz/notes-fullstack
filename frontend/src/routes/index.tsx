@@ -3,6 +3,7 @@ import NoteList from "../components/NoteList";
 import type { ApiRoutes } from "../../../server/app";
 import { hc } from "hono/client";
 import { useQuery } from "@tanstack/react-query";
+import AddNote from "../components/AddNote";
 
 export const client = hc<ApiRoutes>("/");
 export const Route = createFileRoute("/")({
@@ -19,7 +20,7 @@ async function getNotes() {
 }
 
 export default function Index() {
-  const { isPending, error, data } = useQuery({
+  const { isPending, error, data, refetch } = useQuery({
     queryKey: ["notes"],
     queryFn: getNotes,
   });
@@ -27,5 +28,10 @@ export default function Index() {
   if (isPending) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  return <NoteList notes={data} isPending={isPending} error={error} />;
+  return (
+    <>
+      <AddNote refetch={refetch} />
+      <NoteList notes={data} isPending={isPending} error={error} />
+    </>
+  );
 }
