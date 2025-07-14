@@ -2,6 +2,15 @@
 
 based on Sam Meech-Ward's [Tutorial on YT](https://www.youtube.com/watch?v=jXyTIQOfTTk&ab_channel=SamMeech-Ward)
 
+## Tech stack
+
+- React [react.dev](https://react.dev/) - frontend
+- Hono [hono.dev](https://hono.dev/) - server
+- Render [render.com](https://render.com/) - for deployment
+- Tan Stack [tanstack.com](https://tanstack.com/):
+  Form, Router, Query
+- ShadCn [ui.shadcn.com](https://ui.shadcn.com/) - UI components
+
 ## BUN
 
 To install dependencies:
