@@ -1,9 +1,5 @@
-import { hc } from "hono/client";
-import type { ApiRoutes } from "../../../server/app.ts";
 import type { Note } from "../../../types/notes";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-
-export const client = hc<ApiRoutes>("/");
 
 type NoteListProps = {
   isPending: boolean;

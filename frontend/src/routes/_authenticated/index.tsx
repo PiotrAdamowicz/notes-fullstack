@@ -1,12 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import NoteList from "../components/NoteList";
-import type { ApiRoutes } from "../../../server/app";
-import { hc } from "hono/client";
+import NoteList from "../../components/NoteList";
 import { useQuery } from "@tanstack/react-query";
-import AddNote from "../components/AddNote";
+import AddNote from "../../components/AddNote";
+import { client } from "../../lib/api";
 
-export const client = hc<ApiRoutes>("/");
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/")({
   component: Index,
 });
 

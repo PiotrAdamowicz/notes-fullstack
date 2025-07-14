@@ -1,10 +1,10 @@
+import { client } from "../lib/api";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { useForm } from "@tanstack/react-form";
 import type { AnyFieldApi } from "@tanstack/react-form";
-import { client } from "../routes/index";
 
 type AddNoteProps = {
   refetch: () => void;
