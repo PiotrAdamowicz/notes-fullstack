@@ -2,12 +2,13 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { createNoteSchema } from "../../schema/notes";
 import { fakeNotes } from "../../fakeNotes";
+import { getUser } from "../kinde";
 
 export const notesRoute = new Hono()
-  .get("/", async (c) => {
+  .get("/", getUser, async (c) => {
     return c.json(fakeNotes);
   })
-  .post("/", zValidator("json", createNoteSchema), async (c) => {
+  .post("/", getUser, zValidator("json", createNoteSchema), async (c) => {
     const data = await c.req.valid("json");
     const note = createNoteSchema.parse(data);
 
@@ -21,7 +22,7 @@ export const notesRoute = new Hono()
 
     return c.json(note);
   })
-  .get("/:id{[0-9]+}", (c) => {
+  .get("/:id{[0-9]+}", getUser, (c) => {
     const id = Number.parseInt(c.req.param("id"));
     const note = fakeNotes.find((note) => note.id === id);
     if (!note) {
@@ -29,7 +30,7 @@ export const notesRoute = new Hono()
     }
     return c.json({ note });
   })
-  .delete("/:id{[0-9]+}", (c) => {
+  .delete("/:id{[0-9]+}", getUser, (c) => {
     const id = Number.parseInt(c.req.param("id"));
     const index = fakeNotes.findIndex((note) => note.id === id);
     if (index === -1) {
