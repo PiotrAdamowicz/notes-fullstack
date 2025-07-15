@@ -1,4 +1,4 @@
-import { NoteColors } from "../../../types/notes";
+import { NoteColors } from "../../../types/enums";
 import { client } from "../lib/api";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
