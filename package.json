@@ -5,12 +5,14 @@
   "private": true,
   "scripts": {
     "start": "bun server/index.ts",
-    "dev": "bun --watch server/index.ts"
+    "dev": "bun --watch server/index.ts",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/pg": "^8.15.4",
-    "drizzle-kit": "^0.31.4"
+    "drizzle-kit": "^0.31.4",
+    "husky": "^9.1.7"
   },
   "peerDependencies": {
     "typescript": "^5"
