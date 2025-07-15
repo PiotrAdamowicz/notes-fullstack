@@ -1,0 +1,1 @@
+import{R as n,j as o,O as e}from"./index-DzxVsE_2.js";const s=()=>o.jsxs("div",{children:["You have to login",o.jsx("a",{href:"/api/login",children:"Login!"})]}),i=()=>{const{user:t}=n.useRouteContext();return t?o.jsx(e,{}):o.jsx(s,{})};export{i as component};

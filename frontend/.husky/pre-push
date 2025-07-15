@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo "Running build with Bun before push..."
+
+# Run the build command
+bun run build
+
+# Check if build failed
+if [ $? -ne 0 ]; then
+  echo "❌ Build failed. Push aborted."
+  exit 1
+fi
+
+echo "✅ Build succeeded. Proceeding with push."
+exit 0

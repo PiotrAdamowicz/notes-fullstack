@@ -1,4 +1,0 @@
-#!/bin/sh
-cd frontend
-bun run build
-cd -
