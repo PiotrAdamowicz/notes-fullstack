@@ -1,11 +1,14 @@
 #!/bin/sh
 
-echo "Running build with Bun before push..."
+echo "📦 Running Bun build in /frontend before push..."
 
-# Run the build command
+cd frontend || {
+  echo "❌ Could not find /frontend folder."
+  exit 1
+}
+
 bun run build
 
-# Check if build failed
 if [ $? -ne 0 ]; then
   echo "❌ Build failed. Push aborted."
   exit 1
