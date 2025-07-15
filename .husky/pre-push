@@ -1,18 +1,34 @@
 #!/bin/sh
 
-echo "📦 Running Bun build in /frontend before push..."
+echo "🔍 Checking if /frontend has changed..."
 
-cd frontend || {
-  echo "❌ Could not find /frontend folder."
-  exit 1
-}
+# Read stdin for remote and ref info
+while read local_ref local_sha remote_ref remote_sha
+do
+  # Get diff of files being pushed
+  changes=$(git diff --name-only "$remote_sha" "$local_sha" -- frontend/)
 
-bun run build
+  if [ -n "$changes" ]; then
+    echo "📦 Changes detected in /frontend:"
+    echo "$changes"
+    echo "⚙️  Running Bun build..."
 
-if [ $? -ne 0 ]; then
-  echo "❌ Build failed. Push aborted."
-  exit 1
-fi
+    cd frontend || {
+      echo "❌ Could not find /frontend folder."
+      exit 1
+    }
 
-echo "✅ Build succeeded. Proceeding with push."
+    bun run build
+
+    if [ $? -ne 0 ]; then
+      echo "❌ Build failed. Push aborted."
+      exit 1
+    fi
+
+    echo "✅ Build succeeded."
+  else
+    echo "✅ No changes in /frontend. Skipping build."
+  fi
+done
+
 exit 0
