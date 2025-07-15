@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { createNoteSchema } from "../../schema/notes";
-import { fakeNotes } from "../../fakeNotes";
 import { getUser } from "../kinde";
 import { db } from "../db/db";
 import { notesTable } from "../db/schema/notes";
@@ -36,21 +35,27 @@ export const notesRoute = new Hono()
     c.status(201);
     return c.json(result);
   })
-  .get("/:id{[0-9]+}", getUser, (c) => {
+  .get("/:id{[0-9]+}", getUser, async (c) => {
     const id = Number.parseInt(c.req.param("id"));
-    const note = fakeNotes.find((note) => note.id === id);
+    const note = await db
+      .select()
+      .from(notesTable)
+      .where(eq(notesTable.id, id))
+      .then((res) => res[0]);
     if (!note) {
       return c.notFound();
     }
     return c.json({ note });
   })
-  .delete("/:id{[0-9]+}", getUser, (c) => {
+  .delete("/:id{[0-9]+}", getUser, async (c) => {
     const id = Number.parseInt(c.req.param("id"));
-    const index = fakeNotes.findIndex((note) => note.id === id);
-    if (index === -1) {
+    const deletedNote = await db
+      .delete(notesTable)
+      .where(eq(notesTable.id, id))
+      .returning();
+    if (!deletedNote) {
       return c.notFound();
     }
 
-    const deletedNote = fakeNotes.splice(index, 1)[0];
     return c.json({ note: deletedNote });
   });
