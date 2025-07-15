@@ -3,24 +3,38 @@ import { zValidator } from "@hono/zod-validator";
 import { createNoteSchema } from "../../schema/notes";
 import { fakeNotes } from "../../fakeNotes";
 import { getUser } from "../kinde";
+import { db } from "../db/db";
+import { notes as notesTable } from "../db/schema/notes";
+import { eq } from "drizzle-orm";
 
 export const notesRoute = new Hono()
   .get("/", getUser, async (c) => {
-    return c.json(fakeNotes);
+    if (c.error) {
+      return c.json({ error: c.error.message }, 500);
+    }
+    const user = c.var.user;
+    const notes = await db
+      .select()
+      .from(notesTable)
+      .where(eq(notesTable.userId, user.id));
+
+    return c.json(notes);
   })
   .post("/", getUser, zValidator("json", createNoteSchema), async (c) => {
     const data = await c.req.valid("json");
     const note = createNoteSchema.parse(data);
+    const user = c.var.user;
 
-    fakeNotes.push({
-      ...note,
-      id: fakeNotes.length + 1,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      color: note.color || "transparent",
-    });
+    const result = await db
+      .insert(notesTable)
+      .values({
+        ...note,
+        userId: user.id,
+      })
+      .returning();
 
-    return c.json(note);
+    c.status(201);
+    return c.json(result);
   })
   .get("/:id{[0-9]+}", getUser, (c) => {
     const id = Number.parseInt(c.req.param("id"));

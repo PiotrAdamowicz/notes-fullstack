@@ -28,8 +28,6 @@ export default function AddNote({ refetch }: AddNoteProps) {
       content: "",
     },
     onSubmit: async ({ value }) => {
-      // Do something with form data
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       const res = await client.api.notes.$post({ json: value });
       if (!res.ok) {
         throw new Error("Failed to add note");
@@ -59,7 +57,6 @@ export default function AddNote({ refetch }: AddNoteProps) {
                 : undefined,
           onChangeAsyncDebounceMs: 500,
           onChangeAsync: async ({ value }) => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
             return (
               value.includes("error") && 'No "error" allowed in first name'
             );
@@ -94,7 +91,6 @@ export default function AddNote({ refetch }: AddNoteProps) {
                 : undefined,
           onChangeAsyncDebounceMs: 500,
           onChangeAsync: async ({ value }) => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
             return (
               value.includes("error") && 'No "error" allowed in first name'
             );

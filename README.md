@@ -10,6 +10,8 @@ based on Sam Meech-Ward's [Tutorial on YT](https://www.youtube.com/watch?v=jXyTI
 - Tan Stack [tanstack.com](https://tanstack.com/):
   Form, Router, Query
 - ShadCn [ui.shadcn.com](https://ui.shadcn.com/) - UI components
+- Neon [neon.com](https://neon.com/) - for postgres databes
+- Drizzle ORM [orm.drizzle.team](https://orm.drizzle.team/)
 
 ## BUN
 
