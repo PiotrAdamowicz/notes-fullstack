@@ -1,6 +1,6 @@
 import { pgTable, boolean, text, serial, pgEnum } from "drizzle-orm/pg-core";
 
-export const notes = pgTable("notes", {
+export const notesTable = pgTable("notes", {
   id: serial("id").primaryKey(),
   userId: text("userId").notNull(),
   title: text("title").notNull(),

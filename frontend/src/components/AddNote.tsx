@@ -1,3 +1,4 @@
+import { NoteColors } from "../../../types/notes";
 import { client } from "../lib/api";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -26,6 +27,13 @@ export default function AddNote({ refetch }: AddNoteProps) {
     defaultValues: {
       title: "",
       content: "",
+      userId: "",
+      isPinned: false,
+      isArchived: false,
+      isTrashed: false,
+      createdAt: "",
+      updatedAt: "",
+      color: NoteColors.transparent,
     },
     onSubmit: async ({ value }) => {
       const res = await client.api.notes.$post({ json: value });

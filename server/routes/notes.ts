@@ -4,7 +4,7 @@ import { createNoteSchema } from "../../schema/notes";
 import { fakeNotes } from "../../fakeNotes";
 import { getUser } from "../kinde";
 import { db } from "../db/db";
-import { notes as notesTable } from "../db/schema/notes";
+import { notesTable } from "../db/schema/notes";
 import { eq } from "drizzle-orm";
 
 export const notesRoute = new Hono()

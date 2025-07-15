@@ -4,15 +4,15 @@ const noteSchema = z.object({
   id: z.number().int().positive(),
   userId: z.string(),
   title: z.string().min(3).max(100),
-  isPinned: z.boolean().optional(),
-  isArchived: z.boolean().optional(),
-  isTrashed: z.boolean().optional(),
-  content: z.string().optional(),
-  createdAt: z.string().datetime().optional(),
-  updatedAt: z.string().datetime().optional(),
+  isPinned: z.boolean().nullable(),
+  isArchived: z.boolean().nullable(),
+  isTrashed: z.boolean().nullable(),
+  content: z.string().nullable(),
+  createdAt: z.string().datetime().nullable(),
+  updatedAt: z.string().datetime().nullable(),
   color: z
     .enum(["red", "green", "blue", "yellow", "purple", "orange", "transparent"])
-    .optional(),
+    .nullable(),
 });
 
 const createNoteSchema = noteSchema.omit({
