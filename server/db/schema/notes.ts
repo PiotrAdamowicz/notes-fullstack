@@ -1,14 +1,22 @@
-import { pgTable, boolean, text, serial } from "drizzle-orm/pg-core";
+import { pgTable, boolean, text, serial, pgEnum } from "drizzle-orm/pg-core";
 
 export const notes = pgTable("notes", {
   id: serial("id").primaryKey(),
-  userId: text("user_id").notNull(),
+  userId: text("userId").notNull(),
   title: text("title").notNull(),
-  isPinned: boolean("is_pinned").default(false),
-  isArchived: boolean("is_archived").default(false),
-  isTrashed: boolean("is_trashed").default(false),
+  isPinned: boolean("isPinned").default(false),
+  isArchived: boolean("isArchived").default(false),
+  isTrashed: boolean("isTrashed").default(false),
   content: text("content").default(""),
-  createdAt: text("created_at").default(new Date().toISOString()),
-  updatedAt: text("updated_at").default(new Date().toISOString()),
-  color: text("color").default("transparent"),
+  createdAt: text("createdAt").default(new Date().toISOString()),
+  updatedAt: text("updatedAt").default(new Date().toISOString()),
+  color: pgEnum("color", [
+    "red",
+    "green",
+    "blue",
+    "yellow",
+    "purple",
+    "orange",
+    "transparent",
+  ])().default("transparent"),
 });
