@@ -4,7 +4,7 @@ import { createNoteSchema } from "../../schema/notes";
 import { getUser } from "../kinde";
 import { db } from "../db/db";
 import { notesTable } from "../db/schema/notes";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export const notesRoute = new Hono()
   .get("/", getUser, async (c) => {
@@ -15,7 +15,8 @@ export const notesRoute = new Hono()
     const notes = await db
       .select()
       .from(notesTable)
-      .where(eq(notesTable.userId, user.id));
+      .where(eq(notesTable.userId, user.id))
+      .orderBy(desc(notesTable.createdAt));
 
     return c.json(notes);
   })

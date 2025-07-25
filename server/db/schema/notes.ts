@@ -1,4 +1,11 @@
-import { pgTable, boolean, text, serial, pgEnum } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  boolean,
+  text,
+  serial,
+  pgEnum,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 export const notesTable = pgTable("notes", {
   id: serial("id").primaryKey(),
@@ -8,8 +15,8 @@ export const notesTable = pgTable("notes", {
   isArchived: boolean("isArchived").default(false),
   isTrashed: boolean("isTrashed").default(false),
   content: text("content").default(""),
-  createdAt: text("createdAt").default(new Date().toISOString()),
-  updatedAt: text("updatedAt").default(new Date().toISOString()),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow(),
   color: pgEnum("color", [
     "red",
     "green",

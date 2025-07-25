@@ -4,4 +4,4 @@ Bun.serve({
   fetch: app.fetch,
 });
 
-console.log("server runing");
+console.log(`Server is runing on: http://localhost:3000/`);

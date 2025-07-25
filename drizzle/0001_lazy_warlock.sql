@@ -1,0 +1,1 @@
+ALTER TABLE "notes" ALTER COLUMN "color" SET DEFAULT 'transparent';
