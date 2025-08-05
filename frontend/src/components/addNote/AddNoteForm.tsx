@@ -60,7 +60,7 @@ export default function AddNoteForm({
 
 	return (
 		<form
-			className="max-w-3/5 mx-auto border border-input rounded-md px-4 py-3"
+			className="border border-input rounded-md px-4 py-3"
 			ref={formRef}
 			onSubmit={(e) => {
 				e.preventDefault();

@@ -29,9 +29,9 @@ export default function Index() {
 	return (
 		<>
 			<div className="max-w-full">
-				<AddNote refetch={refetch} />
+				<AddNote refetch={refetch} />			
+				<NoteList notes={data} isPending={isPending} error={error} />
 			</div>
-			<NoteList notes={data} isPending={isPending} error={error} />
 		</>
 	);
 }
