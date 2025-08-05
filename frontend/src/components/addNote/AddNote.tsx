@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState} from "react";
 import AddNoteForm from "./AddNoteForm";
-import type { AddNoteProps } from "./addnote";
+import type { AddNoteProps } from "../../../../types/addnote";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 export default function AddNote({ refetch }: AddNoteProps) {
 	const [formActive, setFormActive] = useState(false);
-	const formRef = useRef<HTMLFormElement | null>(null);
+	const formRef = useClickOutside<HTMLFormElement>(() => setFormActive(false));
 	const formInstanceRef = useRef<{ submit: () => void }>(null);
 
 	useEffect(() => {

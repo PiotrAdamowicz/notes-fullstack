@@ -1,11 +1,10 @@
 import { NoteColors } from "../../../../types/enums";
 import { client } from "../../lib/api";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { useForm } from "@tanstack/react-form";
 import type { AnyFieldApi } from "@tanstack/react-form";
-import type { AddNoteFormProps } from "./addnote";
+import type { AddNoteFormProps } from "../../../../types/addnote";
 import { useEffect } from "react";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
@@ -38,7 +37,6 @@ export default function AddNoteForm({
 			color: NoteColors.transparent,
 		},
 		onSubmit: async ({ value }) => {
-			console.log(value)
 			if(!value.title || !value.content ) return;
 			const res = await client.api.notes.$post({ json: value });
 			if (!res.ok) {
