@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import NoteList from "../../components/NoteList";
+import NoteList from "../../components/notes/NoteList";
 import { useQuery } from "@tanstack/react-query";
 import AddNote from "../../components/addNote/AddNote";
 import { client } from "../../lib/api";

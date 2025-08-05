@@ -1,10 +1,10 @@
-import type { Note } from "../../../types/notes";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import type { NoteType } from "../../../../types/notes";
+import Note from "./Note";
 
 type NoteListProps = {
   isPending: boolean;
   error: { message: string } | null;
-  notes: Note[];
+  notes: NoteType[];
 };
 
 export default function NoteList({ isPending, error, notes }: NoteListProps) {
@@ -16,12 +16,7 @@ export default function NoteList({ isPending, error, notes }: NoteListProps) {
       {isPending
         ? "..."
         : notes.map((note) => (
-            <Card className="" key={note.id}>
-              <CardHeader>
-                <CardTitle>{note.title}</CardTitle>
-              </CardHeader>
-              <CardContent>{note.content}</CardContent>
-            </Card>
+          <Note note={note} key={note.id}/>
           ))}
     </div>
   );
