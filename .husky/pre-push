@@ -26,6 +26,14 @@ do
     fi
 
     echo "✅ Build succeeded."
+
+    # Commit changes
+    git add ./dist
+
+    git commit -m "chore: auto-commit build output from pre-push hook" || {
+        echo "ℹ️  No changes to commit."
+      }
+
   else
     echo "✅ No changes in /frontend. Skipping build."
   fi
