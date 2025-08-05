@@ -2,7 +2,11 @@
 
 based on Sam Meech-Ward's [Tutorial on YT](https://www.youtube.com/watch?v=jXyTIQOfTTk&ab_channel=SamMeech-Ward)
 
-## Tech stack
+## Scripts & worflow
+
+Publish on branch push with script for pre-push to build forntend (script in .husky folder)
+
+### Tech stack
 
 - React [react.dev](https://react.dev/) - frontend
 - Hono [hono.dev](https://hono.dev/) - server
@@ -13,7 +17,7 @@ based on Sam Meech-Ward's [Tutorial on YT](https://www.youtube.com/watch?v=jXyTI
 - Neon [neon.com](https://neon.com/) - for postgres databes
 - Drizzle ORM [orm.drizzle.team](https://orm.drizzle.team/)
 
-## BUN
+### BUN
 
 To install dependencies:
 
