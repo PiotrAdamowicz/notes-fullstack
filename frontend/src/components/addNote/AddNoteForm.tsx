@@ -3,25 +3,14 @@ import { client } from "../../lib/api";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { useForm } from "@tanstack/react-form";
-import type { AnyFieldApi } from "@tanstack/react-form";
 import type { AddNoteFormProps } from "../../../../types/addnote";
 import { useEffect } from "react";
-
-function FieldInfo({ field }: { field: AnyFieldApi }) {
-    return (
-        <>
-            {field.state.meta.isTouched && !field.state.meta.isValid ? (
-                <em>{field.state.meta.errors.join(", ")}</em>
-            ) : null}
-            {field.state.meta.isValidating ? "Validating..." : null}
-        </>
-    );
-}
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 export default function AddNoteForm({
     children,
     refetch,
-    formRef,
+    setFormActive,
     formInstanceRef,
 }: AddNoteFormProps) {
     const form = useForm({
@@ -48,6 +37,10 @@ export default function AddNoteForm({
         },
     });
 
+    const formRef = useClickOutside<HTMLFormElement>(() => {
+        formInstanceRef.current?.submit();
+        setFormActive(false);
+    });
     useEffect(() => {
         if (formInstanceRef) {
             formInstanceRef.current = {
@@ -83,7 +76,6 @@ export default function AddNoteForm({
                                 placeholder="Title"
                                 className="text-xl"
                             />
-                            <FieldInfo field={field} />
                         </>
                     );
                 }}
@@ -104,12 +96,12 @@ export default function AddNoteForm({
                                 className="resize-none"
                                 placeholder="Create a note..."
                             />
-                            <FieldInfo field={field} />
                         </>
                     );
                 }}
             />
             <div className="flex justify-end">{children}</div>
+            <button type="submit">Submit</button>
         </form>
     );
 }
