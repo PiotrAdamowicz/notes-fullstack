@@ -6,6 +6,7 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -48,6 +49,9 @@ export default function Note({ note }: NoteComponentProps) {
                     <DialogTitle>{note.title}</DialogTitle>
                     <DialogDescription>{note.content}</DialogDescription>
                 </DialogHeader>
+                <DialogFooter>
+                    {/* <Button variant="ghost">Close</Button> */}
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );
