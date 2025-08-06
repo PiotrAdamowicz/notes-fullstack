@@ -1,15 +1,27 @@
 import { useEffect, useState } from "react";
-import type{ NoteComponentProps} from "../../../../types/notes"
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import type { NoteComponentProps } from "../../../../types/notes";
 
-export default function Note ({note}: NoteComponentProps){
-    const [isActive, setIsActive] = useState(false)
+import { useClickOutside } from "../../hooks/useClickOutside";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "../ui/dialog";
+import NotePlaceholder from "./NotePlaceholder";
+
+export default function Note({ note }: NoteComponentProps) {
+    const [isActive, setIsActive] = useState(false);
     const cardRef = useClickOutside<HTMLDivElement>(() => setIsActive(false));
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+            if (
+                cardRef.current &&
+                !cardRef.current.contains(event.target as Node)
+            ) {
                 setIsActive(false);
             }
         }
@@ -17,21 +29,20 @@ export default function Note ({note}: NoteComponentProps){
         document.addEventListener("mousedown", handleClickOutside);
 
         return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
-  }, []);
+    }, []);
 
-    return(
-        <Card
-            ref={cardRef}
-            isActive={isActive}
-            onClick={()=>setIsActive(true)}
-            onBlur={()=>setIsActive(false)}
-        >
-            <CardHeader>
-            <CardTitle>{note.title}</CardTitle>
-            </CardHeader>
-            <CardContent>{note.content}</CardContent>
-        </Card>
-    )
+    return (
+        <Dialog>
+            <DialogTrigger>
+                <NotePlaceholder
+                    cardRef={cardRef}
+                    isActive={isActive}
+                    setIsActive={setIsActive}
+                    note={note}
+                />
+            </DialogTrigger>
+        </Dialog>
+    );
 }
