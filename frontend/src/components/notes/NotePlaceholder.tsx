@@ -9,6 +9,7 @@ export default function NotePlaceholder({
 }: NotePlaceholderComponentProps) {
     return (
         <Card
+            bg={note.color}
             ref={cardRef}
             isActive={isActive}
             onClick={() => setIsActive(true)}

@@ -12,6 +12,7 @@ import {
     DialogTrigger,
 } from "../ui/dialog";
 import NotePlaceholder from "./NotePlaceholder";
+import { Button } from "../ui/button";
 
 export default function Note({ note }: NoteComponentProps) {
     const [isActive, setIsActive] = useState(false);
@@ -44,14 +45,15 @@ export default function Note({ note }: NoteComponentProps) {
                     note={note}
                 />
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent
+                bg={note.color}
+                closeBtn={<Button variant="color">Close</Button>}
+            >
                 <DialogHeader>
                     <DialogTitle>{note.title}</DialogTitle>
                     <DialogDescription>{note.content}</DialogDescription>
                 </DialogHeader>
-                <DialogFooter>
-                    {/* <Button variant="ghost">Close</Button> */}
-                </DialogFooter>
+                <DialogFooter />
             </DialogContent>
         </Dialog>
     );
