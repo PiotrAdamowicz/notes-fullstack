@@ -35,7 +35,7 @@ export default function Note({ note }: NoteComponentProps) {
 
     return (
         <Dialog>
-            <DialogTrigger>
+            <DialogTrigger className="relative">
                 <NotePlaceholder
                     cardRef={cardRef}
                     isActive={isActive}
@@ -43,6 +43,12 @@ export default function Note({ note }: NoteComponentProps) {
                     note={note}
                 />
             </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{note.title}</DialogTitle>
+                    <DialogDescription>{note.content}</DialogDescription>
+                </DialogHeader>
+            </DialogContent>
         </Dialog>
     );
 }

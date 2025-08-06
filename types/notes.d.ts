@@ -3,7 +3,13 @@ import type { createNoteSchema, noteSchema } from "../schema/notes";
 import type { boolean } from "zod/v4";
 
 export type NoteType = z.infer<typeof noteSchema>;
-export interface NoteComponentProps {note:NoteType}
+export interface NoteComponentProps {
+    note: NoteType;
+}
 export type NewNote = z.infer<typeof createNoteSchema>;
-
-export { Note, NewNote };
+export interface NotePlaceholderComponentProps {
+    cardRef: RefObject<HTMLDivElement>;
+    isActive: boolean;
+    setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
+    note: NoteType;
+}
