@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { NoteComponentProps } from "../../../../types/notes";
 
 import { useClickOutside } from "../../hooks/useClickOutside";
@@ -13,27 +13,26 @@ import {
 } from "../ui/dialog";
 import NotePlaceholder from "./NotePlaceholder";
 import { Button } from "../ui/button";
+import { useForm } from "@tanstack/react-form";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 export default function Note({ note }: NoteComponentProps) {
     const [isActive, setIsActive] = useState(false);
-    const cardRef = useClickOutside<HTMLDivElement>(() => setIsActive(false));
+    const cardRef = useClickOutside<HTMLDivElement>(() => {
+        form.handleSubmit();
+        setIsActive(false);
+    });
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (
-                cardRef.current &&
-                !cardRef.current.contains(event.target as Node)
-            ) {
-                setIsActive(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+    const form = useForm({
+        defaultValues: {
+            title: note.title,
+            content: note.content,
+        },
+        onSubmit: async ({ value }) => {
+            console.log(value);
+        },
+    });
 
     return (
         <Dialog>
@@ -50,8 +49,55 @@ export default function Note({ note }: NoteComponentProps) {
                 closeBtn={<Button variant="color">Close</Button>}
             >
                 <DialogHeader>
-                    <DialogTitle>{note.title}</DialogTitle>
-                    <DialogDescription>{note.content}</DialogDescription>
+                    <DialogTitle>
+                        <form.Field
+                            name="title"
+                            children={(field) => {
+                                return (
+                                    <>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) =>
+                                                field.handleChange(
+                                                    e.target.value
+                                                )
+                                            }
+                                            type="text"
+                                            placeholder="Title"
+                                            className="text-xl"
+                                        />
+                                    </>
+                                );
+                            }}
+                        />
+                    </DialogTitle>
+                    <DialogDescription>
+                        <form.Field
+                            name="content"
+                            children={(field) => {
+                                return (
+                                    <>
+                                        <Textarea
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) =>
+                                                field.handleChange(
+                                                    e.target.value
+                                                )
+                                            }
+                                            className="resize-none"
+                                            placeholder="Create a note..."
+                                        />
+                                    </>
+                                );
+                            }}
+                        />
+                    </DialogDescription>
                 </DialogHeader>
                 <DialogFooter />
             </DialogContent>

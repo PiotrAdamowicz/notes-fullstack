@@ -4,8 +4,6 @@ import type { AddNoteProps } from "../../../../types/addnote";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 
-//TODO: Submit form on click outside
-
 export default function AddNote({ refetch }: AddNoteProps) {
     const [formActive, setFormActive] = useState(false);
     const formInstanceRef = useRef<{ submit: () => void }>(null);
