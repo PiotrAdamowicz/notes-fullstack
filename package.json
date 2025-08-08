@@ -1,28 +1,31 @@
 {
-  "name": "hono-fullstack",
-  "module": "server/index.ts",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "start": "bun server/index.ts",
-    "dev": "bun --watch server/index.ts",
-    "prepare": "husky"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/pg": "^8.15.4",
-    "drizzle-kit": "^0.31.4",
-    "husky": "^9.1.7"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "@hono/zod-validator": "^0.7.0",
-    "@kinde-oss/kinde-typescript-sdk": "^2.12.0",
-    "drizzle-orm": "^0.44.2",
-    "hono": "^4.8.4",
-    "postgres": "^3.4.7",
-    "zod": "^3.25.74"
-  }
+    "name": "hono-fullstack",
+    "module": "server/index.ts",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "dev": "concurrently \"bun run dev:server\" \"bun run dev:frontend\"",
+        "start": "bun server/index.ts",
+        "dev:server": "bun --watch server/index.ts",
+        "dev:frontend": "cd frontend && bun dev",
+        "prepare": "husky"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "@types/pg": "^8.15.4",
+        "concurrently": "^9.2.0",
+        "drizzle-kit": "^0.31.4",
+        "husky": "^9.1.7"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "dependencies": {
+        "@hono/zod-validator": "^0.7.0",
+        "@kinde-oss/kinde-typescript-sdk": "^2.12.0",
+        "drizzle-orm": "^0.44.2",
+        "hono": "^4.8.4",
+        "postgres": "^3.4.7",
+        "zod": "^3.25.74"
+    }
 }
