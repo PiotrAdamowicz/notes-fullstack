@@ -11,8 +11,10 @@ import ColorSelector from "./ColorSelector";
 
 export default function CardColorPickerPopover({
     color,
+    noteId,
 }: {
     color: ColorType;
+    noteId: number;
 }) {
     const portalContainer = usePopoverPortal(containerId);
     return (
@@ -25,7 +27,7 @@ export default function CardColorPickerPopover({
                     className="flex gap-2"
                     container={portalContainer}
                 >
-                    <ColorSelector color={color ?? undefined} />
+                    <ColorSelector noteId={noteId} color={color ?? undefined} />
                 </PopoverContent>
             </Popover>
         </div>

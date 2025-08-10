@@ -6,7 +6,6 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -74,35 +73,34 @@ export default function Note({ note }: NoteComponentProps) {
                             }}
                         />
                     </DialogTitle>
-                    <DialogDescription asChild>
-                        <form.Field
-                            name="content"
-                            children={(field) => {
-                                return (
-                                    <div>
-                                        <Textarea
-                                            id={field.name}
-                                            name={field.name}
-                                            value={field.state.value}
-                                            onBlur={field.handleBlur}
-                                            onChange={(e) =>
-                                                field.handleChange(
-                                                    e.target.value
-                                                )
-                                            }
-                                            className="resize-none"
-                                            placeholder="Create a note..."
-                                        />
-                                    </div>
-                                );
-                            }}
-                        />
-                    </DialogDescription>
+                    <form.Field
+                        name="content"
+                        children={(field) => {
+                            return (
+                                <div>
+                                    <Textarea
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) =>
+                                            field.handleChange(e.target.value)
+                                        }
+                                        className="resize-none"
+                                        placeholder="Create a note..."
+                                    />
+                                </div>
+                            );
+                        }}
+                    />
                 </DialogHeader>
                 <DialogFooter id={containerId}>
                     <DialogClose asChild>
-                        <div>
-                            <CardColorPickerPopover color={note.color} />
+                        <div className="w-full flex">
+                            <CardColorPickerPopover
+                                color={note.color}
+                                noteId={note.id}
+                            />
                             <Button variant="color">Close</Button>
                         </div>
                     </DialogClose>
