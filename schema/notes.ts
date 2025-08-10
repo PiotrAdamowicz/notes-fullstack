@@ -21,4 +21,10 @@ const createNoteSchema = noteSchema.omit({
     updatedAt: true,
 });
 
-export { noteSchema, createNoteSchema };
+const colorSchema = z.object({
+    color: z
+        .enum(["red", "green", "blue", "yellow", "purple", "orange", "default"])
+        .nullable(),
+});
+
+export { noteSchema, createNoteSchema, colorSchema };
