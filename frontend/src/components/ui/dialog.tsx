@@ -2,9 +2,8 @@ import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 import { cn } from "../../lib/utils";
-import { Button } from "./button";
 import { cva } from "class-variance-authority";
-import type { NoteColors } from "../../../../types/enums";
+import type { ColorType } from "../../../../types/utils";
 
 function Dialog({
     ...props
@@ -27,7 +26,11 @@ function DialogPortal({
 function DialogClose({
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Close>) {
-    return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
+    return (
+        <DialogPrimitive.Close data-slot="dialog-close" {...props}>
+            {props.children}
+        </DialogPrimitive.Close>
+    );
 }
 
 function DialogOverlay({
@@ -73,20 +76,10 @@ function DialogContent({
     children,
     showCloseButton = true,
     bg,
-    closeBtn,
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
     showCloseButton?: boolean;
-    closeBtn?: React.ReactNode;
-    bg:
-        | "red"
-        | "green"
-        | "blue"
-        | "yellow"
-        | "purple"
-        | "orange"
-        | "default"
-        | null;
+    bg: ColorType;
 }) {
     return (
         <>
@@ -103,9 +96,7 @@ function DialogContent({
                             asChild
                             data-slot="dialog-close"
                             className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground rounded-md opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
-                        >
-                            {closeBtn}
-                        </DialogPrimitive.Close>
+                        ></DialogPrimitive.Close>
                     )}
                 </DialogFooter>
             </DialogPrimitive.Content>

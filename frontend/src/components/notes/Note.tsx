@@ -4,6 +4,7 @@ import type { NoteComponentProps } from "../../../../types/notes";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
@@ -16,6 +17,8 @@ import { Button } from "../ui/button";
 import { useForm } from "@tanstack/react-form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import CardColorPickerPopover from "./CardColorPickerPopover";
+import { containerId } from "../../consts/elementId";
 
 export default function Note({ note }: NoteComponentProps) {
     const [isActive, setIsActive] = useState(false);
@@ -30,7 +33,7 @@ export default function Note({ note }: NoteComponentProps) {
             content: note.content,
         },
         onSubmit: async ({ value }) => {
-            console.log(value);
+            // console.log(value);
         },
     });
 
@@ -44,10 +47,7 @@ export default function Note({ note }: NoteComponentProps) {
                     note={note}
                 />
             </DialogTrigger>
-            <DialogContent
-                bg={note.color}
-                closeBtn={<Button variant="color">Close</Button>}
-            >
+            <DialogContent bg={note.color}>
                 <DialogHeader>
                     <DialogTitle>
                         <form.Field
@@ -74,12 +74,12 @@ export default function Note({ note }: NoteComponentProps) {
                             }}
                         />
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription asChild>
                         <form.Field
                             name="content"
                             children={(field) => {
                                 return (
-                                    <>
+                                    <div>
                                         <Textarea
                                             id={field.name}
                                             name={field.name}
@@ -93,13 +93,20 @@ export default function Note({ note }: NoteComponentProps) {
                                             className="resize-none"
                                             placeholder="Create a note..."
                                         />
-                                    </>
+                                    </div>
                                 );
                             }}
                         />
                     </DialogDescription>
                 </DialogHeader>
-                <DialogFooter />
+                <DialogFooter id={containerId}>
+                    <DialogClose asChild>
+                        <div>
+                            <CardColorPickerPopover color={note.color} />
+                            <Button variant="color">Close</Button>
+                        </div>
+                    </DialogClose>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );
