@@ -33,6 +33,7 @@ do
     git commit -m "chore: auto-commit build output from pre-push hook" || {
         echo "ℹ️  No changes to commit."
       }
+    git push
 
   else
     echo "✅ No changes in /frontend. Skipping build."
