@@ -37,7 +37,6 @@ export default function AddNoteForm({
             if (!res.ok) {
                 throw new Error("Failed to add note");
             }
-            //refresh the note list after adding a new note
             refetch();
             form.reset();
         },
