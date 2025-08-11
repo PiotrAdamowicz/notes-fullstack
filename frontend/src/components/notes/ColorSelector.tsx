@@ -3,8 +3,6 @@ import { NoteColors } from "../../../../types/enums";
 import { bgVariant } from "../ui/dialog";
 import { cva } from "class-variance-authority";
 import { cn } from "../../lib/utils";
-import { useQueryClient } from "@tanstack/react-query";
-import { client } from "../../lib/api";
 import { usePatchNoteColor } from "../../hooks/useQuerys";
 
 const colorOptionVariant = cva(

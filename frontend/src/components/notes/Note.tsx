@@ -18,13 +18,20 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import CardColorPickerPopover from "./CardColorPickerPopover";
 import { containerId } from "../../consts/elementId";
+import { usePatchNote } from "../../hooks/useQuerys";
 
 export default function Note({ note }: NoteComponentProps) {
     const [isActive, setIsActive] = useState(false);
-    const cardRef = useClickOutside<HTMLDivElement>(() => {
-        form.handleSubmit();
-        setIsActive(false);
-    });
+    const patchNote = usePatchNote();
+    //FIXME: update happends with delay it sewams submit is not trigger right yet
+    const submitHandler = () => {
+        if (isActive) {
+            console.log("submitHandler worked: ");
+            form.handleSubmit();
+            setIsActive(false);
+        }
+    };
+    const cardRef = useClickOutside<HTMLDivElement>(() => submitHandler());
 
     const form = useForm({
         defaultValues: {
@@ -32,7 +39,15 @@ export default function Note({ note }: NoteComponentProps) {
             content: note.content,
         },
         onSubmit: async ({ value }) => {
-            // console.log(value);
+            const { title, content } = value;
+            console.log("onSubmit worked: ", title, content);
+            if (title !== note.title || content !== note.content) {
+                patchNote.mutate({
+                    noteId: note.id,
+                    title,
+                    content,
+                });
+            }
         },
     });
 
@@ -46,7 +61,7 @@ export default function Note({ note }: NoteComponentProps) {
                     note={note}
                 />
             </DialogTrigger>
-            <DialogContent bg={note.color}>
+            <DialogContent cardRef={cardRef} bg={note.color}>
                 <DialogHeader>
                     <DialogTitle>
                         <form.Field
@@ -101,7 +116,12 @@ export default function Note({ note }: NoteComponentProps) {
                                 color={note.color}
                                 noteId={note.id}
                             />
-                            <Button variant="color">Close</Button>
+                            <Button
+                                variant="color"
+                                onClick={() => submitHandler()}
+                            >
+                                Close
+                            </Button>
                         </div>
                     </DialogClose>
                 </DialogFooter>

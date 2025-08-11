@@ -1,6 +1,10 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-import { colorSchema, createNoteSchema } from "../../schema/notes";
+import {
+    colorSchema,
+    createNoteSchema,
+    patchNoteSchema,
+} from "../../schema/notes";
 import { getUser } from "../kinde";
 import { db } from "../db/db";
 import { notesTable } from "../db/schema/notes";
@@ -50,6 +54,26 @@ export const notesRoute = new Hono()
     })
     .patch(
         "/:id{[0-9]+}",
+        getUser,
+        zValidator("json", patchNoteSchema),
+        async (c) => {
+            const data = await c.req.valid("json");
+            const noteId = Number.parseInt(c.req.param("id"));
+            const { title, content } = patchNoteSchema.parse(data);
+
+            const updatedNote = await db
+                .update(notesTable)
+                .set({
+                    title,
+                    content,
+                })
+                .where(eq(notesTable.id, noteId))
+                .returning();
+            return c.json(updatedNote);
+        }
+    )
+    .patch(
+        "/color/:id{[0-9]+}",
         getUser,
         zValidator("json", colorSchema),
         async (c) => {

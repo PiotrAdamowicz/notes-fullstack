@@ -2,6 +2,7 @@ import { hc } from "hono/client";
 import type { ApiRoutes } from "../../../server/app";
 import { queryOptions } from "@tanstack/react-query";
 import type { ColorType } from "../../../types/utils";
+import type { PatchNoteType } from "../../../types/notes";
 
 export const client = hc<ApiRoutes>("/");
 
@@ -35,8 +36,26 @@ export const notesQueryOptions = {
     staleTime: 1000 * 60 * 5,
 };
 
-export async function patchNoteColor(noteId: number, color: ColorType) {
+export async function patchNote(
+    noteId: number,
+    title: string,
+    content: string | null
+) {
     const res = await client.api.notes[":id{[0-9]+}"].$patch({
+        param: { id: `${noteId}` },
+        json: {
+            title,
+            content,
+        },
+    });
+    if (!res.ok) {
+        throw new Error("Failed to update note");
+    }
+    return res.json();
+}
+
+export async function patchNoteColor(noteId: number, color: ColorType) {
+    const res = await client.api.notes.color[":id{[0-9]+}"].$patch({
         param: { id: `${noteId}` },
         json: {
             color,

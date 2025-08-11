@@ -1,13 +1,16 @@
 import z from "zod";
 
+const titleSchema = z.string().max(100);
+const contentSchema = z.string().nullable();
+
 const noteSchema = z.object({
     id: z.number().int().positive(),
     userId: z.string(),
-    title: z.string().min(3).max(100),
+    title: titleSchema,
     isPinned: z.boolean().nullable(),
     isArchived: z.boolean().nullable(),
     isTrashed: z.boolean().nullable(),
-    content: z.string().nullable(),
+    content: contentSchema,
     createdAt: z.string().datetime().nullable(),
     updatedAt: z.string().datetime().nullable(),
     color: z
@@ -27,4 +30,15 @@ const colorSchema = z.object({
         .nullable(),
 });
 
-export { noteSchema, createNoteSchema, colorSchema };
+const patchNoteSchema = noteSchema.omit({
+    isPinned: true,
+    isArchived: true,
+    isTrashed: true,
+    color: true,
+    createdAt: true,
+    updatedAt: true,
+    id: true,
+    userId: true,
+});
+
+export { noteSchema, createNoteSchema, colorSchema, patchNoteSchema };
