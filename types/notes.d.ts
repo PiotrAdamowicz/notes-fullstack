@@ -8,7 +8,6 @@ export interface NoteComponentProps {
 }
 export type NewNote = z.infer<typeof createNoteSchema>;
 export interface NotePlaceholderComponentProps {
-    cardRef: RefObject<HTMLDivElement>;
     isActive: boolean;
     setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
     note: NoteType;

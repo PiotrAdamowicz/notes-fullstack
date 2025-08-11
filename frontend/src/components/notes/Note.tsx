@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type { NoteComponentProps } from "../../../../types/notes";
 
-import { useClickOutside } from "../../hooks/useClickOutside";
 import {
     Dialog,
     DialogClose,
@@ -19,19 +18,21 @@ import { Textarea } from "../ui/textarea";
 import CardColorPickerPopover from "./CardColorPickerPopover";
 import { containerId } from "../../consts/elementId";
 import { usePatchNote } from "../../hooks/useQuerys";
+import { useClickAway } from "@uidotdev/usehooks";
 
 export default function Note({ note }: NoteComponentProps) {
     const [isActive, setIsActive] = useState(false);
     const patchNote = usePatchNote();
-    //FIXME: update happends with delay it sewams submit is not trigger right yet
+
     const submitHandler = () => {
         if (isActive) {
-            console.log("submitHandler worked: ");
             form.handleSubmit();
             setIsActive(false);
         }
     };
-    const cardRef = useClickOutside<HTMLDivElement>(() => submitHandler());
+    const cardRef = useClickAway(() => {
+        submitHandler();
+    });
 
     const form = useForm({
         defaultValues: {
@@ -40,7 +41,6 @@ export default function Note({ note }: NoteComponentProps) {
         },
         onSubmit: async ({ value }) => {
             const { title, content } = value;
-            console.log("onSubmit worked: ", title, content);
             if (title !== note.title || content !== note.content) {
                 patchNote.mutate({
                     noteId: note.id,
@@ -55,7 +55,6 @@ export default function Note({ note }: NoteComponentProps) {
         <Dialog>
             <DialogTrigger className="relative">
                 <NotePlaceholder
-                    cardRef={cardRef}
                     isActive={isActive}
                     setIsActive={setIsActive}
                     note={note}

@@ -2,7 +2,6 @@ import type { NotePlaceholderComponentProps } from "../../../../types/notes";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export default function NotePlaceholder({
-    cardRef,
     isActive,
     setIsActive,
     note,
@@ -10,7 +9,6 @@ export default function NotePlaceholder({
     return (
         <Card
             bg={note.color}
-            ref={cardRef}
             isActive={isActive}
             onClick={() => setIsActive(true)}
             onBlur={() => setIsActive(false)}
