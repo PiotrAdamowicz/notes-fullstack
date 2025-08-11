@@ -7,5 +7,4 @@ export type AddNoteProps = {
 export interface AddNoteFormProps extends AddNoteProps {
     children: ReactNode;
     setFormActive: React.Dispatch<React.SetStateAction<boolean>>;
-    formInstanceRef: RefObject<{ submit: () => void } | null>;
 }

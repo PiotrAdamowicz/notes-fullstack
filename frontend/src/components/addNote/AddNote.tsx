@@ -20,11 +20,7 @@ export default function AddNote({ refetch }: AddNoteProps) {
             className="cursor-pointer mt-8 mb-4 sm:max-w-3/5 mx-auto"
         >
             {formActive ? (
-                <AddNoteForm
-                    refetch={refetch}
-                    setFormActive={setFormActive}
-                    formInstanceRef={formInstanceRef}
-                >
+                <AddNoteForm refetch={refetch} setFormActive={setFormActive}>
                     <Button variant="ghost" onClick={closeForm} type="button">
                         Close
                     </Button>

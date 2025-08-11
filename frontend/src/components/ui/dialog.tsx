@@ -76,11 +76,11 @@ function DialogContent({
     children,
     showCloseButton = true,
     bg,
-    cardRef,
+    ref,
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
     showCloseButton?: boolean;
-    cardRef?: React.RefObject<HTMLDivElement> | null;
+    ref?: React.RefObject<HTMLDivElement> | null;
     bg: ColorType;
 }) {
     return (
@@ -88,7 +88,7 @@ function DialogContent({
             <DialogOverlay />
             <DialogPrimitive.Content
                 data-slot="dialog-content"
-                ref={cardRef}
+                ref={ref}
                 className={cn(dialogContentVariants({ bg, className }))}
                 {...props}
             >

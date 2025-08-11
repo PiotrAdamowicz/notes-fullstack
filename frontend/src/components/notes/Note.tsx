@@ -30,7 +30,7 @@ export default function Note({ note }: NoteComponentProps) {
             setIsActive(false);
         }
     };
-    const cardRef = useClickAway(() => {
+    const cardRef = useClickAway<HTMLDivElement>(() => {
         submitHandler();
     });
 
@@ -60,7 +60,7 @@ export default function Note({ note }: NoteComponentProps) {
                     note={note}
                 />
             </DialogTrigger>
-            <DialogContent cardRef={cardRef} bg={note.color}>
+            <DialogContent ref={cardRef} bg={note.color}>
                 <DialogHeader>
                     <DialogTitle>
                         <form.Field
@@ -71,7 +71,7 @@ export default function Note({ note }: NoteComponentProps) {
                                         <Input
                                             id={field.name}
                                             name={field.name}
-                                            value={field.state.value}
+                                            value={field.state.value ?? ""}
                                             onBlur={field.handleBlur}
                                             onChange={(e) =>
                                                 field.handleChange(
@@ -95,7 +95,7 @@ export default function Note({ note }: NoteComponentProps) {
                                     <Textarea
                                         id={field.name}
                                         name={field.name}
-                                        value={field.state.value}
+                                        value={field.state.value ?? ""}
                                         onBlur={field.handleBlur}
                                         onChange={(e) =>
                                             field.handleChange(e.target.value)

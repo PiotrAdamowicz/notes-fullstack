@@ -4,15 +4,21 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { useForm } from "@tanstack/react-form";
 import type { AddNoteFormProps } from "../../../../types/addnote";
-import { useEffect } from "react";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import { useClickAway } from "@uidotdev/usehooks";
+import { Button } from "../ui/button";
 
 export default function AddNoteForm({
-    children,
     refetch,
     setFormActive,
-    formInstanceRef,
 }: AddNoteFormProps) {
+    const submitHandler = () => {
+        form.handleSubmit();
+        setFormActive(false);
+    };
+    const formRef = useClickAway<HTMLFormElement>(() => {
+        submitHandler();
+    });
+
     const form = useForm({
         defaultValues: {
             title: "",
@@ -37,27 +43,17 @@ export default function AddNoteForm({
         },
     });
 
-    const formRef = useClickOutside<HTMLFormElement>(() => {
-        formInstanceRef.current?.submit();
+    const closeForm = (e: React.MouseEvent<HTMLButtonElement>) => {
+        console.log("submiting");
+        e.stopPropagation();
+        form.handleSubmit();
         setFormActive(false);
-    });
-    useEffect(() => {
-        if (formInstanceRef) {
-            formInstanceRef.current = {
-                submit: () => form.handleSubmit(),
-            };
-        }
-    }, [form, formInstanceRef]);
+    };
 
     return (
         <form
             className="border border-input rounded-md px-4 py-3"
             ref={formRef}
-            onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-            }}
         >
             <form.Field
                 name="title"
@@ -100,8 +96,9 @@ export default function AddNoteForm({
                     );
                 }}
             />
-            <div className="flex justify-end">{children}</div>
-            <button type="submit">Submit</button>
+            <Button variant="ghost" onClick={closeForm} type="button">
+                Close
+            </Button>
         </form>
     );
 }
