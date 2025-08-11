@@ -1,11 +1,15 @@
 #!/bin/sh
 
+# If SKIP_PRE_PUSH is set, skip this hook (prevents infinite loop)
+if [ "$SKIP_PRE_PUSH" = "true" ]; then
+  exit 0
+fi
+
 echo "🔍 Checking if /frontend has changed..."
 
-# Read stdin for remote and ref info
 while read local_ref local_sha remote_ref remote_sha
 do
-  # Get diff of files being pushed
+  # Detect changes in frontend folder between commits being pushed
   changes=$(git diff --name-only "$remote_sha" "$local_sha" -- frontend/)
 
   if [ -n "$changes" ]; then
@@ -18,26 +22,24 @@ do
       exit 1
     }
 
-    bun run build
-
-    if [ $? -ne 0 ]; then
+    bun run build || {
       echo "❌ Build failed. Push aborted."
       exit 1
-    fi
+    }
 
     echo "✅ Build succeeded."
 
-    # Commit changes
-    git add ./dist
+    # Go back to repo root to commit build output
+    cd ..
 
+    git add frontend/dist
     git commit -m "chore: auto-commit build output from pre-push hook" || {
-        echo "ℹ️  No changes to commit."
-      }
-    git push
+      echo "ℹ️  No changes to commit."
+    }
 
+    # Push without triggering this hook again
+    SKIP_PRE_PUSH=true git push
   else
     echo "✅ No changes in /frontend. Skipping build."
   fi
 done
-
-exit 0
