@@ -1,25 +1,27 @@
 import { createFileRoute } from "@tanstack/react-router";
 import NoteList from "../../components/notes/NoteList";
-import { useQuery } from "@tanstack/react-query";
 import AddNote from "../../components/addNote/AddNote";
-import { notesQueryOptions } from "../../lib/api";
-import Spinner from "../../components/ui/spinner";
+import { useGetNotes } from "../../hooks/useQuerys";
 
 export const Route = createFileRoute("/_authenticated/")({
     component: Index,
 });
 
 export default function Index() {
-    const { isPending, error, data, refetch } = useQuery(notesQueryOptions);
+    const { isPending, error, data, refetch } = useGetNotes();
 
-    if (isPending) return <Spinner />;
-    if (error) return <div>Error: {error.message}</div>;
+    if (error)
+        return (
+            <div className="text-red-600 text-center">
+                Error: {error.message}
+            </div>
+        );
 
     return (
         <>
             <div className="max-w-full">
                 <AddNote refetch={refetch} />
-                <NoteList notes={data} isPending={isPending} error={error} />
+                <NoteList notes={data} isPending={isPending} />
             </div>
         </>
     );

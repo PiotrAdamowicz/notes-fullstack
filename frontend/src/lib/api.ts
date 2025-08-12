@@ -2,7 +2,6 @@ import { hc } from "hono/client";
 import type { ApiRoutes } from "../../../server/app";
 import { queryOptions } from "@tanstack/react-query";
 import type { ColorType } from "../../../types/utils";
-import type { PatchNoteType } from "../../../types/notes";
 
 export const client = hc<ApiRoutes>("/");
 

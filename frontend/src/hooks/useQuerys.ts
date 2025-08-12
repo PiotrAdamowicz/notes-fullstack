@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { patchNote, patchNoteColor } from "../lib/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { notesQueryOptions, patchNote, patchNoteColor } from "../lib/api";
 import type { ColorType } from "../../../types/utils";
 
 export function usePatchNoteColor() {
@@ -29,4 +29,9 @@ export function usePatchNote() {
             queryClient.invalidateQueries({ queryKey: ["notes"] });
         },
     });
+}
+
+export function useGetNotes() {
+    const { isPending, error, data, refetch } = useQuery(notesQueryOptions);
+    return { isPending, error, data, refetch };
 }
