@@ -65,3 +65,13 @@ export async function patchNoteColor(noteId: number, color: ColorType) {
     }
     return res.json();
 }
+
+export async function deleteNote(noteId: number) {
+    const res = await client.api.notes[":id{[0-9]+}"].$delete({
+        param: { id: `${noteId}` },
+    });
+    if (!res.ok) {
+        throw new Error("Failed to update note color");
+    }
+    return res.json();
+}

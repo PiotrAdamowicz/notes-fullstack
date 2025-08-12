@@ -17,18 +17,23 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import CardColorPickerPopover from "./CardColorPickerPopover";
 import { containerId } from "../../consts/elementId";
-import { usePatchNote } from "../../hooks/useQuerys";
+import { usePatchNote, useRemoveNote } from "../../hooks/useQuerys";
 import { useClickAway } from "@uidotdev/usehooks";
+import { Trash2 } from "lucide-react";
 
 export default function Note({ note }: NoteComponentProps) {
     const [isActive, setIsActive] = useState(false);
     const patchNote = usePatchNote();
+    const removeNote = useRemoveNote();
 
     const submitHandler = () => {
         if (isActive) {
             form.handleSubmit();
             setIsActive(false);
         }
+    };
+    const removeNoteHandler = () => {
+        removeNote.mutate(note.id);
     };
     const cardRef = useClickAway<HTMLDivElement>(() => {
         submitHandler();
@@ -115,6 +120,9 @@ export default function Note({ note }: NoteComponentProps) {
                                 color={note.color}
                                 noteId={note.id}
                             />
+                            <Button onClick={removeNoteHandler} variant="color">
+                                <Trash2 className="cursor-pointer w-5 h-5 my-2 text-red-500 stroke-3" />
+                            </Button>
                             <Button
                                 variant="color"
                                 onClick={() => submitHandler()}
