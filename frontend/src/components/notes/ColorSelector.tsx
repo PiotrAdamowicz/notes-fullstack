@@ -24,19 +24,28 @@ const colorOptionVariant = cva(
 
 interface ColorSelectorProps extends React.ComponentProps<"div"> {
     noteId: number;
+    onColorSelect?: ({
+        color,
+        noteId,
+        event,
+    }: {
+        color: ColorType;
+        noteId: number;
+        event?: React.MouseEvent<HTMLDivElement>;
+    }) => void;
 }
 
-export default function ColorSelector({ color, noteId }: ColorSelectorProps) {
-    const patchColor = usePatchNoteColor();
-
-    const colorChange = (e, option: ColorType) => {
-        e.stopPropagation();
-        if (!color) return;
-        patchColor.mutate({ noteId, color: option });
-    };
+export default function ColorSelector({
+    color,
+    noteId,
+    onColorSelect,
+}: ColorSelectorProps) {
     return Object.keys(NoteColors).map((option) => (
         <div
-            onClick={(e) => colorChange(e, option as ColorType)}
+            onClick={(e) => {
+                e.stopPropagation();
+                onColorSelect?.({ color: option as ColorType, noteId });
+            }}
             key={option}
             className={cn(
                 colorOptionVariant({

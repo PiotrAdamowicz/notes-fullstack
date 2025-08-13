@@ -5,9 +5,9 @@ import {
     PopoverTriggerStopPropagation,
 } from "../ui/popover";
 import { usePopoverPortal } from "../../hooks/usePopoverPortal";
-import { containerId } from "../../consts/elementId";
 import type { ColorType } from "../../../../types/utils";
 import ColorSelector from "./ColorSelector";
+import { usePatchNoteColor } from "../../hooks/useQuerys";
 
 export default function CardColorPickerPopover({
     color,
@@ -16,7 +16,18 @@ export default function CardColorPickerPopover({
     color: ColorType;
     noteId: number;
 }) {
-    const portalContainer = usePopoverPortal(containerId);
+    const portalContainer = usePopoverPortal("cardColorPopover");
+    const patchColor = usePatchNoteColor();
+    const colorChange = ({
+        color,
+        noteId,
+    }: {
+        color: ColorType;
+        noteId: number;
+    }) => {
+        if (!color) return;
+        patchColor.mutate({ noteId, color });
+    };
     return (
         <div className="py-2 w-full">
             <Popover>
@@ -27,7 +38,11 @@ export default function CardColorPickerPopover({
                     className="flex gap-2"
                     container={portalContainer}
                 >
-                    <ColorSelector noteId={noteId} color={color ?? undefined} />
+                    <ColorSelector
+                        onColorSelect={colorChange}
+                        noteId={noteId}
+                        color={color ?? undefined}
+                    />
                 </PopoverContent>
             </Popover>
         </div>
