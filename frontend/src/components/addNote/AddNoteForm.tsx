@@ -40,6 +40,8 @@ export default function AddNoteForm({
             if (!res.ok) throw new Error("Failed to add note");
 
             refetch();
+            setCurrentColor(NoteColors.default);
+            setFormActive(false);
             noteForm.reset();
         },
     });
@@ -102,15 +104,16 @@ export default function AddNoteForm({
                     />
                 )}
             />
+            <div className="flex">
+                <AddNoteColorPickerPopover
+                    color={currentColor}
+                    setCurrentColor={setCurrentColor}
+                />
 
-            <AddNoteColorPickerPopover
-                color={currentColor}
-                setCurrentColor={setCurrentColor}
-            />
-
-            <Button variant="ghost" type="button" onClick={submitAndClose}>
-                Close
-            </Button>
+                <Button variant="ghost" type="button" onClick={submitAndClose}>
+                    Close
+                </Button>
+            </div>
         </form>
     );
 }
