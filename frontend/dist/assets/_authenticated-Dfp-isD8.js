@@ -1,0 +1,1 @@
+import{R as t,j as o,O as e}from"./index-BjxfzTbR.js";const s=()=>o.jsxs("div",{children:["You have to login",o.jsx("a",{href:"/api/login",children:"Login!"})]}),u=function(){const{user:n}=t.useRouteContext();return n?o.jsx(e,{}):o.jsx(s,{})};export{u as component};
