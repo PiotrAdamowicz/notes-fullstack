@@ -3,19 +3,21 @@ import { userQueryOptions } from "../../lib/api";
 import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/profile")({
-  component: Profile,
+    component: Profile,
 });
 
 export default function Profile() {
-  const { isPending, error, data } = useQuery(userQueryOptions);
+    const { isPending, error, data } = useQuery(userQueryOptions);
 
-  if (isPending) return <div>Loading</div>;
-  if (error) return <div>Not logged in</div>;
-  return (
-    <div className="p-2">
-      <h1 className="text-4xl">Hello from Profile!</h1>
-      <p>{data.user.family_name}</p>
-      <a href="/api/logout">Logout!</a>
-    </div>
-  );
+    if (isPending) return <div>Loading</div>;
+    if (error) return <div>Not logged in</div>;
+    return (
+        <div className="p-2">
+            <h1 className="text-4xl">Hi {data.user.given_name}!</h1>
+            <img className="rounded-full my-2" src={data.user.picture} />
+            <footer>
+                <a href="/api/logout">Logout!</a>
+            </footer>
+        </div>
+    );
 }
