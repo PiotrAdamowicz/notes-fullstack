@@ -39,7 +39,7 @@ export default function AddNoteForm({
             color: NoteColors.default,
         },
         onSubmit: async ({ value }) => {
-            if (!value.title || !value.content) return;
+            if (!value.title) return;
             const res = await client.api.notes.$post({
                 json: { ...value, color: currentColor },
             });
@@ -67,7 +67,7 @@ export default function AddNoteForm({
     });
 
     return (
-        <form className={cn(formVariants())} ref={formRef}>
+        <form className={cn(formVariants({ bg: currentColor }))} ref={formRef}>
             <form.Field
                 name="title"
                 children={(field) => {

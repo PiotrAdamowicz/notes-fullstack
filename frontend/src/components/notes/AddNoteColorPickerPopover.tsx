@@ -26,7 +26,6 @@ export default function AddNoteColorPickerPopover({
         e: React.MouseEvent<HTMLDivElement>;
     }) => {
         e.stopPropagation();
-        console.log("Selected color:", color);
         if (color !== null) {
             setCurrentColor(color as NoteColors);
         }
