@@ -53,7 +53,7 @@ export async function patchNote(
     return res.json();
 }
 
-export async function patchNoteColor(noteId: number, color: ColorType) {
+export async function patchNoteColor(color: ColorType, noteId?: number) {
     const res = await client.api.notes.color[":id{[0-9]+}"].$patch({
         param: { id: `${noteId}` },
         json: {

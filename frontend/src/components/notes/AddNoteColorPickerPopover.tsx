@@ -7,21 +7,31 @@ import {
 import { usePopoverPortal } from "../../hooks/usePopoverPortal";
 import type { ColorType } from "../../../../types/utils";
 import ColorSelector from "./ColorSelector";
-import { usePatchNoteColor } from "../../hooks/useQuerys";
+import type { NoteColors } from "../../../../types/enums";
 
-export default function CardColorPickerPopover({
+export default function AddNoteColorPickerPopover({
     color,
-    noteId,
+    setCurrentColor,
 }: {
     color: ColorType;
-    noteId: number;
+    setCurrentColor: React.Dispatch<React.SetStateAction<NoteColors>>;
 }) {
-    const portalContainer = usePopoverPortal("cardColorPopover");
-    const patchColor = usePatchNoteColor();
-    const colorChange = ({ color }: { color: ColorType }) => {
-        if (!color) return;
-        patchColor.mutate({ noteId, color });
+    const portalContainer = usePopoverPortal("addColorPopover");
+
+    const onColorSelect = ({
+        color,
+        e,
+    }: {
+        color: ColorType;
+        e: React.MouseEvent<HTMLDivElement>;
+    }) => {
+        e.stopPropagation();
+        console.log("Selected color:", color);
+        if (color !== null) {
+            setCurrentColor(color as NoteColors);
+        }
     };
+
     return (
         <div className="py-2 w-full">
             <Popover>
@@ -33,7 +43,11 @@ export default function CardColorPickerPopover({
                     container={portalContainer}
                 >
                     <ColorSelector
-                        onSelect={(color) => colorChange({ color })}
+                        onSelect={(color, e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onColorSelect({ e, color });
+                        }}
                         value={color}
                     />
                 </PopoverContent>

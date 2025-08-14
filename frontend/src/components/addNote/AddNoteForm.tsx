@@ -6,11 +6,18 @@ import { useForm } from "@tanstack/react-form";
 import type { AddNoteFormProps } from "../../../../types/addnote";
 import { useClickAway } from "@uidotdev/usehooks";
 import { Button } from "../ui/button";
+import AddNoteColorPickerPopover from "../notes/AddNoteColorPickerPopover";
+import { cn } from "../../lib/utils";
+import { cva } from "class-variance-authority";
+import { bgVariant } from "../ui/dialog";
+import { useState } from "react";
 
 export default function AddNoteForm({
     refetch,
     setFormActive,
 }: AddNoteFormProps) {
+    const [currentColor, setCurrentColor] = useState(NoteColors.default);
+
     const submitHandler = () => {
         form.handleSubmit();
         setFormActive(false);
@@ -33,7 +40,9 @@ export default function AddNoteForm({
         },
         onSubmit: async ({ value }) => {
             if (!value.title || !value.content) return;
-            const res = await client.api.notes.$post({ json: value });
+            const res = await client.api.notes.$post({
+                json: { ...value, color: currentColor },
+            });
             if (!res.ok) {
                 throw new Error("Failed to add note");
             }
@@ -43,17 +52,22 @@ export default function AddNoteForm({
     });
 
     const closeForm = (e: React.MouseEvent<HTMLButtonElement>) => {
-        console.log("submiting");
         e.stopPropagation();
         form.handleSubmit();
         setFormActive(false);
     };
 
+    const formVariants = cva("border border-input rounded-md px-4 py-3", {
+        variants: {
+            bg: bgVariant,
+        },
+        defaultVariants: {
+            bg: "default",
+        },
+    });
+
     return (
-        <form
-            className="border border-input rounded-md px-4 py-3"
-            ref={formRef}
-        >
+        <form className={cn(formVariants())} ref={formRef}>
             <form.Field
                 name="title"
                 children={(field) => {
@@ -94,6 +108,10 @@ export default function AddNoteForm({
                         </>
                     );
                 }}
+            />
+            <AddNoteColorPickerPopover
+                color={currentColor}
+                setCurrentColor={setCurrentColor}
             />
             <Button variant="ghost" onClick={closeForm} type="button">
                 Close

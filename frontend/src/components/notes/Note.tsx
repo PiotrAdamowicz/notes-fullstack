@@ -16,7 +16,6 @@ import { useForm } from "@tanstack/react-form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import CardColorPickerPopover from "./CardColorPickerPopover";
-import { containerId } from "../../consts/elementId";
 import { usePatchNote, useRemoveNote } from "../../hooks/useQuerys";
 import { useClickAway } from "@uidotdev/usehooks";
 import { Trash2 } from "lucide-react";
@@ -113,7 +112,7 @@ export default function Note({ note }: NoteComponentProps) {
                         }}
                     />
                 </DialogHeader>
-                <DialogFooter id={containerId}>
+                <DialogFooter id="cardColorPopover">
                     <DialogClose asChild>
                         <div className="w-full flex">
                             <CardColorPickerPopover

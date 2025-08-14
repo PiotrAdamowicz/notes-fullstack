@@ -2,9 +2,6 @@ import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 import { cn } from "../../lib/utils";
-import { cva } from "class-variance-authority";
-import { bgVariant } from "./dialog";
-import type { ColorType } from "../../../../types/utils";
 
 function Popover({
     ...props

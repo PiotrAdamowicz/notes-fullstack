@@ -3,7 +3,6 @@ import { NoteColors } from "../../../../types/enums";
 import { bgVariant } from "../ui/dialog";
 import { cva } from "class-variance-authority";
 import { cn } from "../../lib/utils";
-import { usePatchNoteColor } from "../../hooks/useQuerys";
 
 const colorOptionVariant = cva(
     "w-7 h-7 rounded-full bg-red-700 cursor-pointer transition-discrete border-1 hover:border-foreground",
@@ -22,37 +21,37 @@ const colorOptionVariant = cva(
     }
 );
 
-interface ColorSelectorProps extends React.ComponentProps<"div"> {
-    noteId: number;
-    onColorSelect?: ({
-        color,
-        noteId,
-        event,
-    }: {
-        color: ColorType;
-        noteId: number;
-        event?: React.MouseEvent<HTMLDivElement>;
-    }) => void;
+interface ColorSelectorProps {
+    value?: ColorType;
+    options?: ColorType[];
+    onSelect?: (color: ColorType, e: React.MouseEvent<HTMLDivElement>) => void;
+    className?: string;
 }
 
 export default function ColorSelector({
-    color,
-    noteId,
-    onColorSelect,
+    value,
+    options = Object.keys(NoteColors) as ColorType[],
+    onSelect,
+    className,
 }: ColorSelectorProps) {
-    return Object.keys(NoteColors).map((option) => (
-        <div
-            onClick={(e) => {
-                e.stopPropagation();
-                onColorSelect?.({ color: option as ColorType, noteId });
-            }}
-            key={option}
-            className={cn(
-                colorOptionVariant({
-                    bg: option as ColorType,
-                    isActive: color === option,
-                })
-            )}
-        />
-    ));
+    return (
+        <div className={cn("flex gap-2", className)}>
+            {options.map((option) => (
+                <div
+                    key={option}
+                    onPointerDown={(e) => e.preventDefault()}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onSelect?.(option, e);
+                    }}
+                    className={cn(
+                        colorOptionVariant({
+                            bg: option,
+                            isActive: value === option,
+                        })
+                    )}
+                />
+            ))}
+        </div>
+    );
 }
