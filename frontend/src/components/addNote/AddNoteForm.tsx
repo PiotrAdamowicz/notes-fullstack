@@ -1,16 +1,16 @@
-import { NoteColors } from "../../../../types/enums";
-import { client } from "../../lib/api";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+import { useState } from "react";
+import { useClickAway } from "@uidotdev/usehooks";
 import { useForm } from "@tanstack/react-form";
 import type { AddNoteFormProps } from "../../../../types/addnote";
-import { useClickAway } from "@uidotdev/usehooks";
-import { Button } from "../ui/button";
-import AddNoteColorPickerPopover from "../notes/AddNoteColorPickerPopover";
-import { cn } from "../../lib/utils";
+import { NoteColors } from "../../../../types/enums";
+import { client } from "../../lib/api";
 import { cva } from "class-variance-authority";
 import { bgVariant } from "../ui/dialog";
-import { useState } from "react";
+import { cn } from "../../lib/utils";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import AddNoteColorPickerPopover from "../notes/AddNoteColorPickerPopover";
+import { Button } from "../ui/button";
 
 export default function AddNoteForm({
     refetch,
@@ -18,15 +18,7 @@ export default function AddNoteForm({
 }: AddNoteFormProps) {
     const [currentColor, setCurrentColor] = useState(NoteColors.default);
 
-    const submitHandler = () => {
-        form.handleSubmit();
-        setFormActive(false);
-    };
-    const formRef = useClickAway<HTMLFormElement>(() => {
-        submitHandler();
-    });
-
-    const form = useForm({
+    const noteForm = useForm({
         defaultValues: {
             title: "",
             content: "",
@@ -39,81 +31,84 @@ export default function AddNoteForm({
             color: NoteColors.default,
         },
         onSubmit: async ({ value }) => {
-            if (!value.title) return;
+            // prevent empty note creation
+            if (!value.title && !value.content) return;
+
             const res = await client.api.notes.$post({
                 json: { ...value, color: currentColor },
             });
-            if (!res.ok) {
-                throw new Error("Failed to add note");
-            }
+            if (!res.ok) throw new Error("Failed to add note");
+
             refetch();
-            form.reset();
+            noteForm.reset();
         },
     });
 
-    const closeForm = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        form.handleSubmit();
+    const submitAndClose = () => {
+        noteForm.handleSubmit();
         setFormActive(false);
     };
 
+    // close form on click outside
+    const formRef = useClickAway<HTMLFormElement>(() => {
+        if (noteForm.state.values.title || noteForm.state.values.content) {
+            submitAndClose();
+        } else {
+            setFormActive(false);
+        }
+    });
+
     const formVariants = cva("border border-input rounded-md px-4 py-3", {
-        variants: {
-            bg: bgVariant,
-        },
-        defaultVariants: {
-            bg: "default",
-        },
+        variants: { bg: bgVariant },
+        defaultVariants: { bg: "default" },
     });
 
     return (
-        <form className={cn(formVariants({ bg: currentColor }))} ref={formRef}>
-            <form.Field
+        <form
+            ref={formRef}
+            className={cn(formVariants({ bg: currentColor }))}
+            onSubmit={(e) => {
+                e.preventDefault();
+                noteForm.handleSubmit();
+            }}
+        >
+            <noteForm.Field
                 name="title"
-                children={(field) => {
-                    return (
-                        <>
-                            <Input
-                                id={field.name}
-                                name={field.name}
-                                value={field.state.value}
-                                onBlur={field.handleBlur}
-                                onChange={(e) =>
-                                    field.handleChange(e.target.value)
-                                }
-                                type="text"
-                                placeholder="Title"
-                                className="text-xl"
-                            />
-                        </>
-                    );
-                }}
+                children={(field) => (
+                    <Input
+                        id={field.name}
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        type="text"
+                        placeholder="Title"
+                        className="text-xl"
+                    />
+                )}
             />
-            <form.Field
+
+            <noteForm.Field
                 name="content"
-                children={(field) => {
-                    return (
-                        <>
-                            <Textarea
-                                id={field.name}
-                                name={field.name}
-                                value={field.state.value}
-                                onBlur={field.handleBlur}
-                                onChange={(e) =>
-                                    field.handleChange(e.target.value)
-                                }
-                                className="resize-none"
-                                placeholder="Create a note..."
-                            />
-                        </>
-                    );
-                }}
+                children={(field) => (
+                    <Textarea
+                        id={field.name}
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        className="resize-none"
+                        placeholder="Create a note..."
+                    />
+                )}
             />
+
             <AddNoteColorPickerPopover
                 color={currentColor}
                 setCurrentColor={setCurrentColor}
             />
-            <Button variant="ghost" onClick={closeForm} type="button">
+
+            <Button variant="ghost" type="button" onClick={submitAndClose}>
                 Close
             </Button>
         </form>
